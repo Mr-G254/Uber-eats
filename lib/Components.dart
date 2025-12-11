@@ -1,3 +1,4 @@
+import 'package:cart_stepper/cart_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:uber_eats/MealData.dart';
 import 'App.dart';
@@ -91,6 +92,95 @@ class Meal extends StatelessWidget{
                     ),
                   )
                 ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CartMeal extends StatefulWidget{
+  final MealData meal;
+  const CartMeal({super.key,required this.meal});
+
+  @override
+  State<CartMeal> createState() => _CartMealState();
+}
+
+class _CartMealState extends State<CartMeal>{
+  int mealCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    mealCount = widget.meal.quantity;
+  }
+
+  @override
+  Widget build(BuildContext context){
+    return Container(
+      padding: EdgeInsets.all(3),
+      child: Row(
+        children: [
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            elevation: 0,
+            color: Color(0xffc1bfbf),
+            child: Image(
+              image: AssetImage(widget.meal.image_Link),
+              fit: BoxFit.cover,
+            ),
+          ),
+          SizedBox(width: 10,),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  widget.meal.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    height: 1,
+                    fontFamily: "Times",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.black
+                  ),
+                ),
+                Text(
+                  "KES ${widget.meal.price.toString()}",
+                  style: TextStyle(
+                    fontFamily: "Times",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Color(0xff11bd83)
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(width: 10,),
+          Container(
+            height: 40,
+            padding: EdgeInsets.only(right: 10,left: 10),
+            child: CartStepperInt(
+              alwaysExpanded: true,
+              size: 30,
+              value: mealCount,
+              didChangeCount: (int value) {
+                setState(() {
+                  mealCount = value;
+                });
+
+                App.incrementMeal(MealData(name: widget.meal.name, price: widget.meal.price, image_Link: widget.meal.image_Link,quantity: value));
+              },
+              style: CartStepperStyle(
+                radius: Radius.circular(4),
+                //
               ),
             ),
           )

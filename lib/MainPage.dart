@@ -20,73 +20,74 @@ class _MainPageState extends State<MainPage>{
     super.dispose();
   }
 
-  final bar = ValueListenableBuilder(
-      valueListenable: App.selectedMeal,
-      builder: (context,value,child){
-        return SafeArea(
-            child: Container(
-              padding: EdgeInsets.only(right: 10,left: 10,top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "UBER EATS",
-                    style: TextStyle(
-                        fontFamily: "Times",
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black
-                    ),
-                  ),
-                  GestureDetector(
-                    child:Container(
-                      height: 35,
-                      width: 35,
-                      padding: EdgeInsets.all(2),
-                      child:  Stack(
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            child: Image(
-                              image: AssetImage("Icons/shopping.png"),
-                              width: 33,
-                              height: 33,
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.bottomRight,
-                            child: CircleAvatar(
-                              radius: 8,
-                              backgroundColor: Color(0xffc11e2c),
-                              child: Text(
-                                value.length.toString(),
-                                style: TextStyle(
-                                    fontFamily: "Times",
-                                    fontSize: 8,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage()));
-
-                    },
-                  )
-                ],
-              ),
-            )
-        );
-      }
-  );
-
   @override
   Widget build(BuildContext context) {
     final search = TextEditingController();
+
+    final bar = ValueListenableBuilder(
+      valueListenable: App.selectedMeal,
+      builder: (context,value,child){
+        return SafeArea(
+          child: Container(
+            padding: EdgeInsets.only(right: 10,left: 10,top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "UBER EATS",
+                  style: TextStyle(
+                      fontFamily: "Times",
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black
+                  ),
+                ),
+                GestureDetector(
+                  child:Container(
+                    height: 35,
+                    width: 35,
+                    padding: EdgeInsets.all(2),
+                    child:  Stack(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          child: Image(
+                            image: AssetImage("Icons/shopping.png"),
+                            width: 33,
+                            height: 33,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.bottomRight,
+                          child: CircleAvatar(
+                            radius: 8,
+                            backgroundColor: Color(0xffc11e2c),
+                            child: Text(
+                              value.length.toString(),
+                              style: TextStyle(
+                                  fontFamily: "Times",
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage()));
+
+                  },
+                )
+              ],
+            ),
+          )
+        );
+      }
+    );
+
 
     final searchbar = Container(
       height: 40,
@@ -133,14 +134,14 @@ class _MainPageState extends State<MainPage>{
             maxCrossAxisExtent: 200,
             children: [
               Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(name: "Rice", price: 2500, image_Link: "Icons/chicken.png"),),
               Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
               Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
               Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
               Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
               Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
               Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(name: "Rice", price: 2500, image_Link: "Icons/chicken.png"),),
               Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
             ],
           )
