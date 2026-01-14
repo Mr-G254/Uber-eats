@@ -8,37 +8,43 @@ import '../Components.dart';
 
 abstract class App{
   static ValueNotifier<List<MealData>> selectedMeal = ValueNotifier([]);
-  static ValueNotifier<int> totalPrice = ValueNotifier(0);
+  static ValueNotifier<double> totalPrice = ValueNotifier(0);
 
-
-  static String serverUrl = 'http://192.168.1.100:8080';
+  static String baseUrl = "https://c3992bbd026b.ngrok-free.app";
+  static String serverUrl = '$baseUrl/api';
   static String currentErrorMessage = "";
 
   static String userName = "";
-  static late Map<String,String> userData;
-  static List<Map<String,String>> userOrders = [];
+  static late Map<String,dynamic> userData;
+  static List<Map<String,dynamic>> userOrders = [];
 
   static List<Meal> meals = [];
 
   static Future<bool> createUser(String fullName, String email, String password)async{
 
     var response = await http.post(
-        Uri.http(serverUrl,"/users/signup"),
-        body: {
-          {
-            "email": email,
-            "password": password,
-            "name": fullName,
-          }
-        }
+      Uri.parse("$serverUrl/users/signup"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+      },
+      body: jsonEncode({
+        "email": email,
+        "password": password,
+        "name": fullName,
+        // "phone number": "012938347"
+      })
     );
 
     if(response.statusCode == 201){
       userData = jsonDecode(response.body)["data"];
+      print(userData);
 
       return true;
     }else{
       currentErrorMessage = jsonDecode(response.body)["message"];
+      print(currentErrorMessage);
 
       return false;
     }
@@ -46,17 +52,21 @@ abstract class App{
 
   static Future<bool> login(String email, String password)async{
     var response = await http.post(
-      Uri.http(serverUrl,"/users/login"),
-      body: {
-        {
-          "email": email,
-          "password": password,
-        }
-      }
+      Uri.parse("$serverUrl/users/login"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+      },
+      body: jsonEncode({
+        "email": email,
+        "password": password,
+      })
     );
 
     if(response.statusCode == 200){
       userData = jsonDecode(response.body)["data"];
+      print(userData);
 
       return true;
     }else{
@@ -66,27 +76,32 @@ abstract class App{
     }
   }
 
-  static Future<void> getMenu()async{
-    var response = await http.get(Uri.http(serverUrl,"/restaurants/{restaurantId}/menu"));
+  static Future<bool> getMenu()async{
+    var response = await http.get(Uri.parse("$serverUrl/restaurants/1/menu"));
 
     if(response.statusCode == 200){
       var result = jsonDecode(response.body);
       List<Meal> widgets = [];
+      print(result);
 
       for(final i in result){
-        widgets.add(Meal(meal: MealData(name: i["name"], price: i["price"], image_Link: i["image"], id: i["id"])));
+        widgets.add(Meal(meal: MealData(name: i["name"], price: i["price"], image_Link: i["imageUrl"], id: i["id"])));
+
 
       }
 
       meals = widgets;
+
+      return true;
     }else{
       currentErrorMessage = jsonDecode(response.body)["message"];
 
+      return false;
     }
   }
 
   static Future<bool> orderFood()async{
-    List<Map<String,int>> orders = [];
+    List<Map<String,dynamic>> orders = [];
 
     for(final i in selectedMeal.value){
       orders.add(
@@ -98,18 +113,21 @@ abstract class App{
     }
 
     var response = await http.post(
-      Uri.http(serverUrl,"/restaurants/{restaurantId}/order"),
-      body: {
-        {
-          "customerName": userData["name"],
-          "customerEmail": userData["email"],
-          "items": orders
-        }
-      }
+      Uri.parse("$serverUrl/restaurants/1/order"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+      },
+      body: jsonEncode({
+        "customerName": userData["name"],
+        "customerEmail": userData["email"],
+        "items": orders
+      })
     );
 
     if(response.statusCode == 200){
-      userOrders.add(jsonDecode(response.body));
+      userOrders.add(jsonDecode(response.body)["Orderitems"]);
       selectedMeal.value = [];
 
       return true;
@@ -162,7 +180,7 @@ abstract class App{
   }
 
   static void getTotalPrice(){
-    int total = 0;
+    double total = 0;
 
     for(final i in selectedMeal.value){
       total = total + (i.price * i.quantity);

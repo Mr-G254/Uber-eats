@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:status_snackbar/status_snackbar.dart';
 import 'package:uber_eats/Components.dart';
 import 'package:uber_eats/MealData.dart';
 import 'package:uber_eats/OrderPage.dart';
@@ -12,7 +14,7 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage>{
+class _MainPageState extends State<MainPage> with AutomaticKeepAliveClientMixin{
 
   @override
   void dispose() {
@@ -119,33 +121,118 @@ class _MainPageState extends State<MainPage>{
       ),
     );
 
+    final shimmerAnimation = Container(
+      padding: EdgeInsets.all(5),
+      child: Column(
+        children: [
+          Expanded(
+            flex: 4,
+            child: Shimmer(
+              duration: Duration(seconds: 2),
+              colorOpacity: 0.9,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0xffc1bfbf),
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(10)
+                ),
+              ),
+            )
+          ),
+          Expanded(
+            flex: 1,
+            child: Shimmer(
+              duration: Duration(seconds: 2),
+              colorOpacity: 0.9,
+              child: Container(
+                margin: EdgeInsets.only(top: 10,bottom: 0),
+                decoration: BoxDecoration(
+                  color: Color(0xffc1bfbf),
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(7)
+                ),
+              ),
+            )
+          )
+        ],
+      ),
+    );
+
     final window  = Column(
       children: [
         bar,
         // SizedBox(height: 0,),
-        searchbar,
+        // searchbar,
         SizedBox(height: 10,),
         Expanded(
-          child: GridView.extent(
-            mainAxisSpacing: 0,
-            padding: EdgeInsets.only(bottom: 10),
-            shrinkWrap: false,
-            childAspectRatio: 5/6,
-            maxCrossAxisExtent: 200,
-            children: [
-              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(id: 1, name: "Rice", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(id: 1, name: "Rice", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-            ],
-          )
-        )
+          child: FutureBuilder(
+            future: App.getMenu(),
+            builder: (context,snapshot){
+             if(snapshot.connectionState == ConnectionState.active || snapshot.connectionState == ConnectionState.waiting){
+                return GridView.extent(
+                  mainAxisSpacing: 0,
+                  padding: EdgeInsets.only(bottom: 10),
+                  shrinkWrap: false,
+                  childAspectRatio: 5/6,
+                  maxCrossAxisExtent: 200,
+                  children: [
+                    shimmerAnimation,
+                    shimmerAnimation,
+                    shimmerAnimation,
+                    shimmerAnimation,
+                    shimmerAnimation,
+                    shimmerAnimation,
+                    shimmerAnimation,
+                    shimmerAnimation,
+                  ],
+                );
+
+             } else if(snapshot.connectionState == ConnectionState.done){
+               if(snapshot.hasError){
+                 print(snapshot.error.toString());
+                 // StatusSnackbar.showError(context, snapshot.error.toString());
+
+                 return GridView.extent(
+                   mainAxisSpacing: 0,
+                   padding: EdgeInsets.only(bottom: 10),
+                   shrinkWrap: false,
+                   childAspectRatio: 5/6,
+                   maxCrossAxisExtent: 200,
+                   children: [
+                     shimmerAnimation,
+                     shimmerAnimation,
+                     shimmerAnimation,
+                     shimmerAnimation,
+                     shimmerAnimation,
+                     shimmerAnimation,
+                     shimmerAnimation,
+                     shimmerAnimation,
+                   ],
+                 );
+               }else {
+                 if(snapshot.data == true){
+                   return GridView.extent(
+                     mainAxisSpacing: 0,
+                     padding: EdgeInsets.only(bottom: 10),
+                     shrinkWrap: false,
+                     childAspectRatio: 5 / 6,
+                     maxCrossAxisExtent: 200,
+                     children: App.meals
+                   );
+                 }else{
+                   StatusSnackbar.showError(context, App.currentErrorMessage);
+                   return SizedBox();
+                 }
+
+               }
+             }else{
+                StatusSnackbar.showError(context, App.currentErrorMessage);
+                print(snapshot.error);
+                return SizedBox();
+             }
+            }
+          ),
+        ),
       ],
     );
 
@@ -157,5 +244,9 @@ class _MainPageState extends State<MainPage>{
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
 }

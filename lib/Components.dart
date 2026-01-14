@@ -81,6 +81,13 @@ class _InputState extends State<Input> {
                   ),
                   fillColor: Colors.white,
                   filled: true,
+                  disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(
+                          width: 1.5,
+                          color: Colors.black
+                      )
+                  ),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
                       borderSide: BorderSide(
@@ -135,7 +142,7 @@ class Meal extends StatelessWidget{
                     Container(
                       alignment: Alignment.center,
                       child: Image(
-                        image: AssetImage(meal.image_Link),
+                        image: NetworkImage(App.baseUrl + meal.image_Link),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -229,13 +236,19 @@ class _CartMealState extends State<CartMeal>{
       padding: EdgeInsets.all(3),
       child: Row(
         children: [
-          Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-            elevation: 0,
-            color: Color(0xffc1bfbf),
-            child: Image(
-              image: AssetImage(widget.meal.image_Link),
-              fit: BoxFit.cover,
+          Container(
+            padding: EdgeInsets.all(0),
+            width: 70,
+            height: 70,
+            child: Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+              elevation: 0,
+              color: Color(0xffc1bfbf),
+              child: Image(
+                image: NetworkImage(App.baseUrl + widget.meal.image_Link),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           SizedBox(width: 10,),

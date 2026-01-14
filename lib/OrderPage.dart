@@ -1,14 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:status_snackbar/status_snackbar.dart';
 import 'package:uber_eats/Components.dart';
-
 import 'Backend/App.dart';
 
-class OrderPage extends StatelessWidget{
+class OrderPage extends StatefulWidget {
   const OrderPage({super.key});
 
   @override
+  State<OrderPage> createState() => _OrderPageState();
+}
+
+class _OrderPageState extends State<OrderPage>{
+  bool loading = false;
+
+  @override
   Widget build(BuildContext context) {
+    final text = Text(
+      "Checkout",
+      style: TextStyle(
+        color: Colors.white,
+        // fontWeight: FontWeight.bold,
+        fontSize: 15
+      ),
+    );
+
+    final loadingAnimation = Container(
+      padding: EdgeInsets.all(0),
+      height: 25,
+      width: 25,
+      child: CircularProgressIndicator(
+        backgroundColor: Colors.transparent,
+        color: Colors.white,
+        strokeWidth: 3,
+        strokeCap: StrokeCap.round,
+      ),
+    );
+
     final bar = AppBar(
+      backgroundColor: Colors.white,
       automaticallyImplyLeading: false,
       title: Text(
         "Order",
@@ -88,22 +117,49 @@ class OrderPage extends StatelessWidget{
                     height: 50,
                     padding: EdgeInsets.all(0),
                     child: ElevatedButton(
-                      onPressed: (){
+                      onPressed: () async {
+                        if(App.selectedMeal.value.isNotEmpty){
+                          setState(() {
+                            loading = true;
+                          });
 
+                          try{
+                            bool success = await App.orderFood();
+
+                            if(success){
+                              if(context.mounted){
+                                Navigator.pop(context);
+                                StatusSnackbar.showSuccess(context, "Your order has been placed successfully");
+                              }
+
+                            }else{
+                              setState(() {
+                                loading = false;
+                              });
+
+                              if(context.mounted){
+                                StatusSnackbar.showSuccess(context, App.currentErrorMessage);
+                              }
+                            }
+                          }catch(e){
+                            setState(() {
+                              loading = false;
+                            });
+                            print(e);
+                            StatusSnackbar.showError(context, e.toString());
+                          }
+
+                        }else{
+                          if(context.mounted){
+                            StatusSnackbar.showError(context, "Add items to the cart for you to place an order");
+                          }
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xffc11e2c),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))
                       ),
-                      child: Text(
-                        "Checkout",
-                        style: TextStyle(
-                          fontFamily: "Times",
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white
-                        ),
-                      ),
+                      child: loading? loadingAnimation : text
                     ),
                   ),
                 ),
@@ -116,6 +172,7 @@ class OrderPage extends StatelessWidget{
     );
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: bar,
       body: window,
     );

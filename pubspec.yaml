@@ -36,6 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.8
   cart_stepper: ^4.3.0
   http: ^1.6.0
+  status_snackbar: ^1.1.2
+  shimmer_animation: ^2.2.2+1
+  email_validator: ^3.0.0
 
 dev_dependencies:
   flutter_test:
