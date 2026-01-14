@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uber_eats/Components.dart';
 
-import 'App.dart';
+import 'Backend/App.dart';
 
 class OrderPage extends StatelessWidget{
   const OrderPage({super.key});
@@ -106,7 +106,8 @@ class OrderPage extends StatelessWidget{
                       ),
                     ),
                   ),
-                )
+                ),
+                SizedBox(height: 5,)
               ],
             )
           )

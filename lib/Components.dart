@@ -1,7 +1,111 @@
 import 'package:cart_stepper/cart_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:uber_eats/MealData.dart';
-import 'App.dart';
+import 'Backend/App.dart';
+
+class Input extends StatefulWidget {
+  final String label;
+  final TextEditingController controller;
+  final TextInputType? type;
+  final bool? enabled;
+
+  const Input({super.key, required this.label, required this.controller, this.type = TextInputType.text,this.enabled = true});
+
+  @override
+  State<Input> createState() => _InputState();
+}
+
+class _InputState extends State<Input> {
+  bool visible = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.type == TextInputType.visiblePassword) {
+      setState(() {
+        visible = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final input = Container(
+      padding: EdgeInsets.all(0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.label,
+            style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.black
+            ),
+          ),
+          SizedBox(height: 5,),
+          Container(
+            padding: EdgeInsets.all(0),
+            height: 45,
+            child: TextField(
+              controller: widget.controller,
+              cursorColor: Colors.black,
+              obscureText: !visible,
+              enabled: widget.enabled,
+              style: TextStyle(
+                  height: 1,
+                  fontSize: 14,
+                  color: Colors.black
+              ),
+              decoration: InputDecoration(
+                  suffixIcon: Visibility(
+                    visible: widget.type == TextInputType.visiblePassword,
+                    child: GestureDetector(
+                      child: Container(
+                        padding: EdgeInsets.all(11),
+                        child: Image(
+                          image: AssetImage(visible == true
+                              ? "Icons/not_visible.png"
+                              : "Icons/visible.png"
+                          ),
+                          color: Colors.black,
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          visible = !visible;
+                        });
+                      },
+                    ),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(
+                        width: 1.5,
+                        color: Colors.black
+                      )
+                   ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: BorderSide(
+                        width: 1.5,
+                        color: Colors.black
+                      )
+                  )
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+
+    return input;
+  }
+}
+
 
 class Meal extends StatelessWidget{
   final MealData meal;
@@ -176,7 +280,7 @@ class _CartMealState extends State<CartMeal>{
                   mealCount = value;
                 });
 
-                App.incrementMeal(MealData(name: widget.meal.name, price: widget.meal.price, image_Link: widget.meal.image_Link,quantity: value));
+                App.incrementMeal(MealData(id: widget.meal.id, name: widget.meal.name, price: widget.meal.price, image_Link: widget.meal.image_Link,quantity: value));
               },
               style: CartStepperStyle(
                 radius: Radius.circular(4),

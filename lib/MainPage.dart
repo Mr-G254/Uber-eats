@@ -3,7 +3,7 @@ import 'package:uber_eats/Components.dart';
 import 'package:uber_eats/MealData.dart';
 import 'package:uber_eats/OrderPage.dart';
 
-import 'App.dart';
+import 'Backend/App.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -133,16 +133,16 @@ class _MainPageState extends State<MainPage>{
             childAspectRatio: 5/6,
             maxCrossAxisExtent: 200,
             children: [
-              Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(name: "Rice", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(name: "Rice", price: 2500, image_Link: "Icons/chicken.png"),),
-              Meal(meal: MealData(name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(id: 1, name: "Rice", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(id: 1, name: "Rice", price: 2500, image_Link: "Icons/chicken.png"),),
+              Meal(meal: MealData(id: 1, name: "Chicken noodle", price: 2500, image_Link: "Icons/chicken.png"),),
             ],
           )
         )

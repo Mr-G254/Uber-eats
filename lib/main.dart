@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-
-import 'MainPage.dart';
+import 'Logins/Login.dart';
 
 void main() {
   runApp(MaterialApp(
+    theme: ThemeData(
+      fontFamily: "Times"
+    ),
     debugShowCheckedModeBanner: false,
-    home: MainPage(),
+    home: Login(),
   ));
 }
 
